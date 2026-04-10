@@ -1,6 +1,6 @@
 {
   "name": "porttop",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Terminal toolkit for inspecting active ports",
   "author": "trungtran <baotrung06092003@gmail.com>",
   "license": "MIT",
