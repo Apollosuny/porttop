@@ -1,0 +1,25 @@
+{
+  "name": "porttop",
+  "module": "bin/porttop.ts",
+  "type": "module",
+  "bin": {
+    "porttop": "./bin/porttop.ts"
+  },
+  "scripts": {
+    "dev": "bun run bin/porttop.ts",
+    "build": "bun build ./bin/porttop.ts --outdir ./dist --target bun",
+    "start": "bun run ./bin/porttop.ts"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "execa": "^9.3.0",
+    "ink": "5.1.0",
+    "picocolors": "^1.1.1",
+    "react": "18.3.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.2.14"
+  }
+}
