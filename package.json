@@ -28,7 +28,7 @@
   ],
   "scripts": {
     "dev": "bun run bin/porttop.ts",
-    "build": "bun build ./bin/porttop.ts --outfile ./dist/porttop.js --target node --bundle --minify --external react-devtools-core && sed -i '' '1s/bun/node/' ./dist/porttop.js && chmod +x ./dist/porttop.js",
+    "build": "bun build ./bin/porttop.ts --outfile ./dist/porttop.js --target node --bundle --minify --external react-devtools-core && bun -e \"let f='dist/porttop.js',c=require('fs').readFileSync(f,'utf8');require('fs').writeFileSync(f,c.replace(/#!\\/usr\\/bin\\/env bun/,'#!/usr/bin/env node'))\" && chmod +x ./dist/porttop.js",
     "start": "node ./dist/porttop.js",
     "prepublishOnly": "bun run build"
   },
