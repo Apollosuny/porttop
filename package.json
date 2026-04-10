@@ -3,7 +3,7 @@
   "module": "bin/porttop.ts",
   "type": "module",
   "bin": {
-    "porttop": "./bin/porttop.ts"
+    "ports": "./bin/porttop.ts"
   },
   "scripts": {
     "dev": "bun run bin/porttop.ts",

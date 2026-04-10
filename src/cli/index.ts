@@ -8,7 +8,7 @@ export async function runCli() {
   const program = new Command();
 
   program
-    .name('porttop')
+    .name('ports')
     .description('Terminal toolkit for inspecting active ports')
     .version('0.1.0');
 
