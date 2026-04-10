@@ -2,27 +2,28 @@ import { Command } from 'commander';
 import { runListCommand } from './commands/list';
 import { runDashboardCommand } from './commands/dashboard';
 import { runInspectCommand } from './commands/inspect';
+import { runHomeCommand } from './commands/home';
 
 export async function runCli() {
   const program = new Command();
 
   program
     .name('porttop')
-    .description('Terminal dashboard for active ports')
+    .description('Terminal toolkit for inspecting active ports')
     .version('0.1.0');
+
+  program
+    .command('dashboard')
+    .description('Open the live dashboard')
+    .action(async () => {
+      await runDashboardCommand();
+    });
 
   program
     .command('list')
     .description('List listening ports')
     .action(async () => {
       await runListCommand();
-    });
-
-  program
-    .command('dashboard')
-    .description('Open terminal dashboard')
-    .action(async () => {
-      await runDashboardCommand();
     });
 
   program
@@ -41,7 +42,7 @@ export async function runCli() {
     });
 
   program.action(async () => {
-    await runDashboardCommand();
+    await runHomeCommand();
   });
 
   await program.parseAsync(process.argv);

@@ -5,6 +5,7 @@ import type { PortEntry } from '../types/port-entry';
 import { PortTable } from './components/port-table';
 import { DetailPanel } from './components/detail-panel';
 import { InspectPanel } from './components/inspect-panel';
+import { theme } from './theme';
 
 export function PortDashboardApp() {
   const { exit } = useApp();
@@ -127,13 +128,13 @@ export function PortDashboardApp() {
 
   return (
     <Box flexDirection='column' paddingX={1} paddingY={1}>
-      <Text bold>Porttop</Text>
-      <Text dimColor>Terminal dashboard for listening ports</Text>
+      <Text>{theme.brand('Porttop')}</Text>
+      <Text>{theme.muted('Terminal dashboard for listening ports')}</Text>
       <Text> </Text>
       <Box flexDirection='column'>
         <Text>
-          Search: {filter}
-          {isFilterMode ? '▋' : ''}
+          {theme.info('Search:')} {filter}
+          {isFilterMode ? theme.warning('▋') : ''}
         </Text>
         <Text dimColor>
           Press / to search, Enter or Esc to exit search mode
@@ -142,16 +143,16 @@ export function PortDashboardApp() {
 
       <Text> </Text>
 
-      {loading ? <Text>Loading ports...</Text> : null}
-      {error ? <Text color='red'>Error: {error}</Text> : null}
+      {loading ? <Text>{theme.warning('Loading ports...')}</Text> : null}
+      {error ? <Text>{theme.danger(`Error: ${error}`)}</Text> : null}
 
       {!loading && !error && ports.length === 0 ? (
-        <Text color='yellow'>No listening ports found.</Text>
+        <Text>{theme.warning('No listening ports found.')}</Text>
       ) : null}
       {!loading && !error && ports.length > 0 && filteredPorts.length === 0 ? (
         <>
-          <Text color='yellow'>No matching ports found.</Text>
-          <Text dimColor>Try another keyword.</Text>
+          <Text>{theme.warning('No matching ports found.')}</Text>
+          <Text>{theme.muted('Try another keyword.')}</Text>
         </>
       ) : null}
 
@@ -168,10 +169,12 @@ export function PortDashboardApp() {
           {isInspectMode ? <InspectPanel port={selectedPort} /> : null}
 
           <Text> </Text>
-          <Text dimColor>
+          <Text>
             {isFilterMode
-              ? 'Type to search • Backspace delete • Enter/Esc exit'
-              : '↑/↓ or j/k • / search • r refresh • q quit'}
+              ? theme.muted(
+                  'Type to search • Backspace delete • Enter/Esc exit',
+                )
+              : theme.muted('↑/↓ or j/k • / search • r refresh • q quit')}
           </Text>
         </>
       ) : null}
