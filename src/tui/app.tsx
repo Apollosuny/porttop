@@ -4,6 +4,7 @@ import { getListeningPorts } from '../core/services/ports-service';
 import type { PortEntry } from '../types/port-entry';
 import { PortTable } from './components/port-table';
 import { DetailPanel } from './components/detail-panel';
+import { InspectPanel } from './components/inspect-panel';
 
 export function PortDashboardApp() {
   const { exit } = useApp();
@@ -15,6 +16,8 @@ export function PortDashboardApp() {
 
   const [filter, setFilter] = useState('');
   const [isFilterMode, setIsFilterMode] = useState(false);
+
+  const [isInspectMode, setIsInspectMode] = useState(false);
 
   const filteredPorts = useMemo(() => {
     const keyword = filter.trim().toLowerCase();
@@ -72,6 +75,13 @@ export function PortDashboardApp() {
       return;
     }
 
+    if (isInspectMode) {
+      if (key.escape || key.return || input === 'q') {
+        setIsInspectMode(false);
+      }
+      return;
+    }
+
     if (input === 'q') {
       exit();
       return;
@@ -84,6 +94,13 @@ export function PortDashboardApp() {
 
     if (input === '/') {
       setIsFilterMode(true);
+      return;
+    }
+
+    if (key.return) {
+      if (selectedPort) {
+        setIsInspectMode(true);
+      }
       return;
     }
 
@@ -145,6 +162,10 @@ export function PortDashboardApp() {
           <Text> </Text>
 
           <DetailPanel selectedPort={selectedPort} />
+
+          <Text> </Text>
+
+          {isInspectMode ? <InspectPanel port={selectedPort} /> : null}
 
           <Text> </Text>
           <Text dimColor>
