@@ -1,0 +1,16 @@
+# Ignore source files
+src/
+bin/
+tsconfig.json
+
+# Ignore Bun-specific files
+bun.lock
+bun.lockb
+
+# Ignore local configs
+.gitignore
+.npmignore
+README.md (not ignored)
+
+# Ignore logs
+*.log

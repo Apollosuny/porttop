@@ -1,14 +1,36 @@
 {
   "name": "porttop",
-  "module": "bin/porttop.ts",
+  "version": "0.1.0",
+  "description": "Terminal toolkit for inspecting active ports",
+  "author": "trungtran <baotrung06092003@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Apollosuny/porttop.git"
+  },
+  "keywords": [
+    "cli",
+    "terminal",
+    "ports",
+    "process",
+    "network",
+    "ink"
+  ],
+  "module": "dist/porttop.js",
   "type": "module",
   "bin": {
-    "ports": "./bin/porttop.ts"
+    "porttop": "dist/porttop.js",
+    "ports": "dist/porttop.js"
   },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "dev": "bun run bin/porttop.ts",
-    "build": "bun build ./bin/porttop.ts --outdir ./dist --target bun",
-    "start": "bun run ./bin/porttop.ts"
+    "build": "bun build ./bin/porttop.ts --outfile ./dist/porttop.js --target node --bundle --minify --external react-devtools-core && sed -i '' '1s/bun/node/' ./dist/porttop.js && chmod +x ./dist/porttop.js",
+    "start": "node ./dist/porttop.js",
+    "prepublishOnly": "bun run build"
   },
   "dependencies": {
     "commander": "^12.1.0",
