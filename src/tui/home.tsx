@@ -11,12 +11,12 @@ const BANNER = `
  |  _ \\ / _ \\|  _ \\_   _|_   _/ _ \\|  _ \\ 
  | |_) | | | | |_) || |   | || | | | |_) |
  |  __/| |_| |  _ < | |   | || |_| |  __/ 
- |_|    \\___/|_| \\_\|_|   |_| \\___/|_|    
+ |_|    \\___/|_| \\_\\|_|   |_| \\___/|_|    
 `;
 
 export function HomeScreenApp({ onOpenDashboard, onOpenList }: Props) {
   const { exit } = useApp();
-  const [selectedIndex, setSelectedIndex] = useState(0); // 0: Dashboard, 1: List, 2: Quit
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const menuItems = [
     { label: 'Open Dashboard', key: 'd', action: onOpenDashboard },
@@ -25,7 +25,6 @@ export function HomeScreenApp({ onOpenDashboard, onOpenList }: Props) {
   ];
 
   useInput((input, key) => {
-    // Shortcuts (Case-insensitive)
     const lowerInput = input.toLowerCase();
     if (lowerInput === 'q') {
       exit();
@@ -40,7 +39,6 @@ export function HomeScreenApp({ onOpenDashboard, onOpenList }: Props) {
       return;
     }
 
-    // Arrow navigation
     if (key.upArrow) {
       setSelectedIndex((prev) => (prev > 0 ? prev - 1 : menuItems.length - 1));
       return;
@@ -50,7 +48,6 @@ export function HomeScreenApp({ onOpenDashboard, onOpenList }: Props) {
       return;
     }
 
-    // Enter confirmation
     if (key.return) {
       menuItems[selectedIndex]?.action();
     }
@@ -82,8 +79,12 @@ export function HomeScreenApp({ onOpenDashboard, onOpenList }: Props) {
           <Box flexDirection="column" marginTop={1}>
             <Text>• <Text color="yellowBright">porttop</Text>            <Text dimColor>Home screen</Text></Text>
             <Text>• <Text color="yellowBright">porttop dashboard</Text>  <Text dimColor>Live Dashboard</Text></Text>
-            <Text>• <Text color="yellowBright">porttop list</Text>       <Text dimColor>Flat list view</Text></Text>
-            <Text>• <Text color="yellowBright">porttop inspect</Text>    <Text dimColor>Port details</Text></Text>
+            <Text>• <Text color="yellowBright">porttop list</Text>       <Text dimColor>List ports (--json/--csv/--watch)</Text></Text>
+            <Text>• <Text color="yellowBright">porttop inspect</Text>    <Text dimColor>Port details (--json/--copy)</Text></Text>
+            <Text>• <Text color="yellowBright">porttop check</Text>      <Text dimColor>Check port availability</Text></Text>
+            <Text>• <Text color="yellowBright">porttop scan</Text>       <Text dimColor>Scan port range</Text></Text>
+            <Text>• <Text color="yellowBright">porttop kill</Text>       <Text dimColor>Kill process on port</Text></Text>
+            <Text>• <Text color="yellowBright">porttop free</Text>       <Text dimColor>Find free port</Text></Text>
           </Box>
         </Box>
 
@@ -95,9 +96,9 @@ export function HomeScreenApp({ onOpenDashboard, onOpenList }: Props) {
               const isSelected = index === selectedIndex;
               return (
                 <Box key={item.key}>
-                  <Text 
-                    backgroundColor={isSelected ? 'cyan' : undefined} 
-                    color={isSelected ? 'black' : 'white'} 
+                  <Text
+                    backgroundColor={isSelected ? 'cyan' : undefined}
+                    color={isSelected ? 'black' : 'white'}
                     bold={isSelected}
                   >
                     {isSelected ? ' ▶ ' : '   '}
@@ -119,5 +120,3 @@ export function HomeScreenApp({ onOpenDashboard, onOpenList }: Props) {
     </Box>
   );
 }
-
-

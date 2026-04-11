@@ -6,4 +6,9 @@ export type PortEntry = {
   processName: string;
   state?: string;
   command?: string;
+  likelyService?: string;
+  containerName?: string;
+  containerImage?: string;
+  cpu?: number;
+  memory?: number;
 };

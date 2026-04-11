@@ -9,11 +9,13 @@ A state-of-the-art terminal toolkit for inspecting active listening ports, debug
 
 ## Features
 
-- 🚀 **Lightning Fast**: Built on top of native system tools for immediate results.
-- 📊 **Interactive Dashboard**: A beautiful, real-time TUI dashboard to monitor all active ports.
-- 🔍 **Deep Inspection**: See exactly which process is using which port, including PIDs and commands.
-- 🛠 **Multiple Views**: Choose between a rich interactive dashboard or a clean, plain-text list for scripting.
-- 🎨 **Beautiful UI**: Modern terminal aesthetics with vibrant colors and smooth transitions.
+- 🚀 **Lightning Fast**: Built on top of native system tools with multi-backend support (`lsof`, `ss`, `netstat`).
+- 📊 **Interactive Dashboard**: A beautiful, real-time TUI dashboard with sorting, filtering, and grouping.
+- 🐳 **Docker Aware**: Automatically identifies Docker containers and images using specific ports.
+- 🕵️‍♂️ **Service Intelligence**: Detects 50+ common services (React, Next.js, Postgres, Redis, etc.).
+- 🛡 **Security First**: Highlights public vs. local bindings and provides fix suggestions for conflicts.
+- 📋 **Automation Ready**: Export data as JSON, CSV, or Markdown. Use watch mode for real-time CLI monitoring.
+- 🎨 **Beautiful UI**: Modern terminal aesthetics with vibrant Cyberpunk colors and smooth transitions.
 
 ---
 
@@ -52,15 +54,80 @@ porttop dashboard
 ```
 
 #### List View
-Output a simplified list of listening ports (great for quick checks).
+Output listening ports with advanced filtering and export options.
 ```bash
-porttop list
+porttop list                      # Normal table view
+porttop list --watch              # Watch mode (refresh every 2s)
+porttop list --json               # Export as JSON
+porttop list --csv                # Export as CSV
+porttop list --markdown           # Export as Markdown table
+porttop list --ignore-port 5432   # Filter out specific ports
 ```
 
 #### Inspect Port
-Get detailed information about a specific port number.
+Get detailed information about a specific port, including Docker info and resource usage.
 ```bash
 porttop inspect 3000
+porttop inspect 3000 --copy pid   # Copy PID to clipboard
+```
+
+#### Check Port
+Check if a port is available or occupied. Returns exit code 1 if occupied.
+```bash
+porttop check 3000
+```
+
+#### Scan Range
+Scan a range of ports to find what's running.
+```bash
+porttop scan 3000-3010
+porttop scan --from 3000 --to 4000 --show-free
+```
+
+#### Find Free Port
+Find the next available port or check a specific one and get a suggestion.
+```bash
+porttop free 3000
+```
+
+#### Kill Process
+Kill processes occupying a port or by PID directly.
+```bash
+porttop kill 3000
+porttop kill --pid 12345 --force
+```
+
+---
+
+## Dashboard Keyboard Shortcuts
+
+When in the **Interactive Dashboard**, use these keys:
+
+- `↑ / ↓ / k / j`: Navigate through port list
+- `Enter`: Inspect selected port details
+- `/`: Start filtering (Search)
+- `s / S`: Cycle sort field / Reverse sort direction
+- `g`: Toggle grouped view (by PID)
+- `x`: Kill selected process (with confirmation)
+- `c / C`: Copy port / PID to clipboard
+- `y`: Copy full row info to clipboard
+- `r`: Refresh list manually
+- `?`: Toggle help modal
+- `q / Esc`: Exit mode or Quit
+
+---
+
+## Configuration
+
+You can create a `.porttoprc` file in your home directory or project root to save default settings:
+
+```json
+{
+  "ignoreProcesses": ["Docker", "rapportd"],
+  "ignorePorts": [22, 443],
+  "theme": "cyberpunk",
+  "refreshInterval": 2
+}
 ```
 
 ---
