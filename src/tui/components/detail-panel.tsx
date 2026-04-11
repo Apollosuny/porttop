@@ -9,34 +9,47 @@ type Props = {
 
 export function DetailPanel({ selectedPort }: Props) {
   return (
-    <Box borderStyle='round' flexDirection='column' paddingX={1}>
-      <Text>{theme.accent('Selected')}</Text>
+    <Box borderStyle='single' borderColor="magenta" flexDirection='column' paddingX={1} minWidth={30}>
+      <Box marginBottom={1}>
+        <Text bold color="magentaBright">📑 Port Metadata</Text>
+      </Box>
 
       {selectedPort ? (
-        <>
-          <Text>
-            <Text>{theme.info('Port:')}</Text> {selectedPort.port}
-          </Text>
-          <Text>
-            <Text>{theme.info('Protocol:')}</Text> {selectedPort.protocol}
-          </Text>
-          <Text>
-            <Text>{theme.info('PID:')}</Text> {selectedPort.pid}
-          </Text>
-          <Text>
-            <Text>{theme.info('Process:')}</Text> {selectedPort.processName}
-          </Text>
-          <Text>
-            <Text>{theme.info('Address:')}</Text> {selectedPort.address}
-          </Text>
-          <Text>
-            <Text>{theme.info('State:')}</Text>{' '}
-            {selectedPort.state ?? 'unknown'}
-          </Text>
-        </>
+        <Box flexDirection="column" gap={0}>
+          <Box>
+            <Text color="cyanBright">🔢 PORT   </Text>
+            <Text bold color="yellowBright">{selectedPort.port}</Text>
+          </Box>
+          <Box>
+            <Text color="cyanBright">🌐 PROTO  </Text>
+            <Text color="white">{selectedPort.protocol.toUpperCase()}</Text>
+          </Box>
+          <Box>
+            <Text color="cyanBright">📄 PID    </Text>
+            <Text color="yellowBright">{selectedPort.pid}</Text>
+          </Box>
+          <Box>
+            <Text color="cyanBright">⚙️ PROC   </Text>
+            <Text color="magentaBright" bold>{selectedPort.processName}</Text>
+          </Box>
+          <Box>
+             <Text color="cyanBright">🛠️ STATE  </Text>
+             <Text color={selectedPort.state?.toLowerCase() === 'listen' ? 'greenBright' : 'yellow'}>
+               {selectedPort.state ?? 'UNKNOWN'}
+             </Text>
+          </Box>
+          <Box marginTop={1} flexDirection="column" borderStyle="single" borderColor="gray" paddingX={1}>
+            <Text color="cyanBright" bold>📍 ADDRESS_BIND</Text>
+            <Text color="white">{selectedPort.address}</Text>
+          </Box>
+        </Box>
       ) : (
-        <Text>{theme.muted('No selection')}</Text>
+        <Box justifyContent="center" alignItems="center" flexGrow={1}>
+          <Text dimColor italic>--- NO SELECTION ---</Text>
+        </Box>
       )}
     </Box>
   );
 }
+
+

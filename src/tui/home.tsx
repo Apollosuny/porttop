@@ -1,90 +1,123 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Text, useApp, useInput } from 'ink';
-import { theme } from './theme';
 
 type Props = {
   onOpenDashboard: () => void;
   onOpenList: () => void;
 };
 
+const BANNER = `
+  ____   ___  ____ _____ _____ ___  ____  
+ |  _ \\ / _ \\|  _ \\_   _|_   _/ _ \\|  _ \\ 
+ | |_) | | | | |_) || |   | || | | | |_) |
+ |  __/| |_| |  _ < | |   | || |_| |  __/ 
+ |_|    \\___/|_| \\_\|_|   |_| \\___/|_|    
+`;
+
 export function HomeScreenApp({ onOpenDashboard, onOpenList }: Props) {
   const { exit } = useApp();
+  const [selectedIndex, setSelectedIndex] = useState(0); // 0: Dashboard, 1: List, 2: Quit
 
-  useInput((input) => {
-    if (input === 'q') {
+  const menuItems = [
+    { label: 'Open Dashboard', key: 'd', action: onOpenDashboard },
+    { label: 'List Ports', key: 'l', action: onOpenList },
+    { label: 'Quit Session', key: 'q', action: exit },
+  ];
+
+  useInput((input, key) => {
+    // Shortcuts (Case-insensitive)
+    const lowerInput = input.toLowerCase();
+    if (lowerInput === 'q') {
       exit();
       return;
     }
-
-    if (input === 'd') {
+    if (lowerInput === 'd') {
       onOpenDashboard();
       return;
     }
-
-    if (input === 'l') {
+    if (lowerInput === 'l') {
       onOpenList();
       return;
+    }
+
+    // Arrow navigation
+    if (key.upArrow) {
+      setSelectedIndex((prev) => (prev > 0 ? prev - 1 : menuItems.length - 1));
+      return;
+    }
+    if (key.downArrow) {
+      setSelectedIndex((prev) => (prev < menuItems.length - 1 ? prev + 1 : 0));
+      return;
+    }
+
+    // Enter confirmation
+    if (key.return) {
+      menuItems[selectedIndex]?.action();
     }
   });
 
   return (
     <Box flexDirection='column' paddingX={2} paddingY={1}>
-      <Text>{theme.brand('┌──────────────────────────────┐')}</Text>
-      <Text>{theme.brand('│           Porttop            │')}</Text>
-      <Text>{theme.brand('└──────────────────────────────┘')}</Text>
+      {/* Header */}
+      <Box flexDirection="column" marginBottom={1}>
+        <Text bold color="cyanBright">{BANNER}</Text>
+        <Box justifyContent="center">
+           <Text color="magentaBright">═══ THE ULTIMATE PORT MONITORING TOOLKIT ═══</Text>
+        </Box>
+      </Box>
 
-      <Text>
-        {theme.muted('Terminal toolkit for inspecting active listening ports')}
-      </Text>
-
-      <Text> </Text>
-
-      <Box borderStyle='round' flexDirection='column' paddingX={1}>
-        <Text>{theme.accent('Welcome')}</Text>
-        <Text>
-          Check which ports are running, inspect local processes, and debug
-          development conflicts faster from your terminal.
+      {/* Welcome Card */}
+      <Box borderStyle='single' borderColor="magenta" flexDirection='column' paddingX={2} marginBottom={1}>
+        <Text color="cyanBright" bold>👋 WELCOME TO PORTTOP</Text>
+        <Text color="white">
+          The most aesthetic way to check which ports are running, inspect processes,
+          and resolve network conflicts directly from your terminal.
         </Text>
       </Box>
 
-      <Text> </Text>
+      <Box flexDirection="row" gap={2}>
+        {/* Commands Card */}
+        <Box borderStyle='single' borderColor="magenta" flexDirection='column' paddingX={2} flexGrow={1}>
+          <Text color="cyanBright" bold>⚡ AVAILABLE COMMANDS</Text>
+          <Box flexDirection="column" marginTop={1}>
+            <Text>• <Text color="yellowBright">porttop</Text>            <Text dimColor>Home screen</Text></Text>
+            <Text>• <Text color="yellowBright">porttop dashboard</Text>  <Text dimColor>Live Dashboard</Text></Text>
+            <Text>• <Text color="yellowBright">porttop list</Text>       <Text dimColor>Flat list view</Text></Text>
+            <Text>• <Text color="yellowBright">porttop inspect</Text>    <Text dimColor>Port details</Text></Text>
+          </Box>
+        </Box>
 
-      <Box borderStyle='round' flexDirection='column' paddingX={1}>
-        <Text>{theme.info('Commands')}</Text>
+        {/* Quick Start Card (Interactive) */}
+        <Box borderStyle='single' borderColor="magenta" flexDirection='column' paddingX={1} width={35}>
+          <Text color="cyanBright" bold>🚀 QUICK START</Text>
+          <Box flexDirection="column" marginTop={1}>
+            {menuItems.map((item, index) => {
+              const isSelected = index === selectedIndex;
+              return (
+                <Box key={item.key}>
+                  <Text 
+                    backgroundColor={isSelected ? 'cyan' : undefined} 
+                    color={isSelected ? 'black' : 'white'} 
+                    bold={isSelected}
+                  >
+                    {isSelected ? ' ▶ ' : '   '}
+                    <Text color={isSelected ? 'black' : 'magentaBright'} bold>[{item.key.toUpperCase()}]</Text> {item.label}
+                  </Text>
+                </Box>
 
-        <Text>{theme.strong('porttop')}</Text>
-        <Text>{theme.muted('  Open the home screen')}</Text>
-
-        <Text>{theme.strong('porttop dashboard')}</Text>
-        <Text>{theme.muted('  Open the interactive dashboard')}</Text>
-
-        <Text>{theme.strong('porttop list')}</Text>
-        <Text>{theme.muted('  Print listening ports in plain text')}</Text>
-
-        <Text>{theme.strong('porttop inspect 3000')}</Text>
-        <Text>{theme.muted('  Inspect a specific port')}</Text>
+              );
+            })}
+          </Box>
+        </Box>
       </Box>
 
-      <Text> </Text>
-
-      <Box borderStyle='round' flexDirection='column' paddingX={1}>
-        <Text>{theme.success('Quick start')}</Text>
-
-        <Text>{theme.warning('d')} Open dashboard</Text>
-        <Text>{theme.warning('l')} Open list view</Text>
-        <Text>{theme.warning('q')} Quit</Text>
+      <Box marginTop={1} justifyContent="center">
+        <Text dimColor>
+          Use <Text color="cyanBright">↑↓</Text> and <Text color="cyanBright">Enter</Text> or press <Text color="magentaBright" bold>D/L/Q</Text>
+        </Text>
       </Box>
-
-      <Text> </Text>
-      <Text>
-        {theme.muted('Press ')}
-        {theme.warning('d')}
-        {theme.muted(' for dashboard, ')}
-        {theme.warning('l')}
-        {theme.muted(' for list, ')}
-        {theme.warning('q')}
-        {theme.muted(' to quit')}
-      </Text>
     </Box>
   );
 }
+
+
